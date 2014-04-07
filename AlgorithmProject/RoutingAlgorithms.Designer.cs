@@ -205,6 +205,7 @@
             this.btnBellman.TabIndex = 0;
             this.btnBellman.Text = "Calculate";
             this.btnBellman.UseVisualStyleBackColor = true;
+            this.btnBellman.Click += btnBellman_Click;
             // 
             // tabPageDijkstra
             // 

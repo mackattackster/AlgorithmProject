@@ -13,6 +13,7 @@ namespace AlgorithmProject.Algorithms
         private List<int[]> _ListOfUpdate;
         private List<String> _ListOfMatrix;
         public int iterationCount;
+        private List<Queue<int>> _Path;
 
         public BellmanFord()
         {
@@ -20,6 +21,13 @@ namespace AlgorithmProject.Algorithms
             this.ListOfDistance = new List<int[]>();
             this.ListOfUpdate = new List<int[]>();
             this.ListOfMatrix = new List<String>();
+            this._Path = new List<Queue<int>>();
+        }
+
+        public List<Queue<int>> Path
+        {
+            get { return _Path; }
+            set { _Path = value; }
         }
 
         public List<String> ListOfMatrix
@@ -56,19 +64,22 @@ namespace AlgorithmProject.Algorithms
             iterationCount = 0;
             InitiateDistanceMatrix();
             InitiateUpdateMatrix();
-            InitiateBellmanFord(this.ListOfDistance);            
+            InitiateBellmanFord(this.ListOfDistance);
+            PathToString();
         }
 
         public void InitiateBellmanFord(List<int[]> distance)
         {
             for (int i = 0; i < distance.Count; i++)
             {
+                this.Path.Add(new Queue<int>());
                 int[] cost = this.ListOfCost[i];
                 for (int j = 0; j < distance.Count; j++)
                 {
-                    int x = FindMin(cost, DistanceMatrixColumn(distance, j));
+                    int x = FindMin(cost, DistanceMatrixColumn(distance, j), i);                    
                     int[] temp = this.ListOfUpdate[i];
                     this.ListOfUpdate[i][j] = x;
+
                     temp[j] = x;
                     this.ListOfUpdate[i] = temp;
                 }//end of inner loop
@@ -133,14 +144,17 @@ namespace AlgorithmProject.Algorithms
             return temp;
         }//end of DistanceMatrixColumn
 
-        public int FindMin(int[] cost, int[] distance)
+        public int FindMin(int[] cost, int[] distance, int node)
         {
             int x = cost[0] + distance[0];
 
             for (int i = 1; i < cost.Length; i++)
             {
                 if (cost[i] + distance[i] < x)
+                {
                     x = cost[i] + distance[i];
+                    this.Path[node].Enqueue(i);
+                }
             }//end of loop
             return x;
         }//end of FindMin
@@ -164,6 +178,20 @@ namespace AlgorithmProject.Algorithms
             }//end of foreach loop
             this.ListOfMatrix.Add(s);
         }//end of MatrixIterationToString
+
+        public void PathToString()
+        {
+            String s = "";
+            foreach (Queue<int> x in this.Path)
+            {
+                foreach (int i in x)
+                {
+                    s += " " + i.ToString() + " ";
+                }
+                s += Environment.NewLine;
+            }
+            System.Windows.Forms.MessageBox.Show(s);
+        }
 
     }//end of class BellmanFord
 }//end of Namespace
