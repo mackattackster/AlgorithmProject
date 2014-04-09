@@ -88,8 +88,22 @@ namespace AlgorithmProject.Algorithms
             if (this.ListOfNodes.Count > 0)
             {
                 SortListOfNodes();
-                Node NewNode = this.ListOfNodes[0];
                 this.ListOfNodes.RemoveAt(0);
+                if (this.ListOfNodes.Count == 0)
+                {
+                    this.BeenThereListOfNodes.Insert(0, this.RootNode);
+                    for (int i = 0; i < this.BeenThereListOfNodes.Count; i++)
+                    {
+                        Node n = this.BeenThereListOfNodes[i];
+                        n.RemoveAllNegativeEdges();
+                    }
+                    // Done with child map. Just add parent map and method to call up the tree until its node :)
+                    CreateParentEdges();
+
+                    FindRoutesForAllPoints();
+                    return;
+                }
+                Node NewNode = this.ListOfNodes[0];             
                 FindChildrenMap(NewNode);
             }
             else
@@ -108,6 +122,7 @@ namespace AlgorithmProject.Algorithms
                 return;
             }
         }
+
 
         public void CreateParentEdges()
         {

@@ -44,7 +44,9 @@
             this.textBoxBellmanDisplay = new System.Windows.Forms.TextBox();
             this.btnBellman = new System.Windows.Forms.Button();
             this.tabPageDijkstra = new System.Windows.Forms.TabPage();
+            this.textBoxDijkstraDisplay = new System.Windows.Forms.TextBox();
             this.btnDijkstra = new System.Windows.Forms.Button();
+            this.comboBoxDijkstra = new System.Windows.Forms.ComboBox();
             this.tabControl.SuspendLayout();
             this.tabPageNetwork.SuspendLayout();
             this.tabPageBellmanFord.SuspendLayout();
@@ -209,6 +211,8 @@
             // 
             // tabPageDijkstra
             // 
+            this.tabPageDijkstra.Controls.Add(this.comboBoxDijkstra);
+            this.tabPageDijkstra.Controls.Add(this.textBoxDijkstraDisplay);
             this.tabPageDijkstra.Controls.Add(this.btnDijkstra);
             this.tabPageDijkstra.Location = new System.Drawing.Point(4, 25);
             this.tabPageDijkstra.Name = "tabPageDijkstra";
@@ -217,6 +221,14 @@
             this.tabPageDijkstra.TabIndex = 2;
             this.tabPageDijkstra.Text = "Dijkstra";
             this.tabPageDijkstra.UseVisualStyleBackColor = true;
+            // 
+            // textBoxDijkstraDisplay
+            // 
+            this.textBoxDijkstraDisplay.Location = new System.Drawing.Point(8, 6);
+            this.textBoxDijkstraDisplay.Multiline = true;
+            this.textBoxDijkstraDisplay.Name = "textBoxDijkstraDisplay";
+            this.textBoxDijkstraDisplay.Size = new System.Drawing.Size(327, 313);
+            this.textBoxDijkstraDisplay.TabIndex = 2;
             // 
             // btnDijkstra
             // 
@@ -227,6 +239,23 @@
             this.btnDijkstra.TabIndex = 1;
             this.btnDijkstra.Text = "Calculate";
             this.btnDijkstra.UseVisualStyleBackColor = true;
+            this.btnDijkstra.Click += btnDijkstra_Click;
+            // 
+            // comboBoxDijkstra
+            // 
+            this.comboBoxDijkstra.FormattingEnabled = true;
+            this.comboBoxDijkstra.Items.AddRange(new object[] {
+            "R1",
+            "R2",
+            "R3",
+            "R4",
+            "R5",
+            "R6"});
+            this.comboBoxDijkstra.Location = new System.Drawing.Point(353, 6);
+            this.comboBoxDijkstra.Name = "comboBoxDijkstra";
+            this.comboBoxDijkstra.Size = new System.Drawing.Size(121, 21);
+            this.comboBoxDijkstra.TabIndex = 3;
+            this.comboBoxDijkstra.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             // 
             // RoutingAlgorithms
             // 
@@ -244,6 +273,7 @@
             this.tabPageBellmanFord.ResumeLayout(false);
             this.tabPageBellmanFord.PerformLayout();
             this.tabPageDijkstra.ResumeLayout(false);
+            this.tabPageDijkstra.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -266,6 +296,8 @@
         private System.Windows.Forms.TextBox textBoxBellmanDisplay;
         private System.Windows.Forms.TextBox textBoxIteration;
         private System.Windows.Forms.Button btnDijkstra;
+        private System.Windows.Forms.TextBox textBoxDijkstraDisplay;
+        private System.Windows.Forms.ComboBox comboBoxDijkstra;
     }
 }
 

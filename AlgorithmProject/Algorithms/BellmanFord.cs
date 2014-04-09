@@ -21,7 +21,7 @@ namespace AlgorithmProject.Algorithms
             this.ListOfDistance = new List<int[]>();
             this.ListOfUpdate = new List<int[]>();
             this.ListOfMatrix = new List<String>();
-            this._Path = new List<Queue<int>>();
+            this.Path = new List<Queue<int>>();
         }
 
         public List<Queue<int>> Path
@@ -61,7 +61,7 @@ namespace AlgorithmProject.Algorithms
 
         public void StartBellmanFord()
         {
-            iterationCount = 0;
+            iterationCount = 1;
             InitiateDistanceMatrix();
             InitiateUpdateMatrix();
             InitiateBellmanFord(this.ListOfDistance);
@@ -83,6 +83,7 @@ namespace AlgorithmProject.Algorithms
                     temp[j] = x;
                     this.ListOfUpdate[i] = temp;
                 }//end of inner loop
+
             }//end of outer loop
             MatrixIterationToString(this.ListOfUpdate);
             iterationCount++;
@@ -92,8 +93,23 @@ namespace AlgorithmProject.Algorithms
                 if (ListOfUpdate[i].Contains(999))
                     InitiateBellmanFord(this.ListOfUpdate);
             }//end of for loop
+            if (!CheckForChange(distance, ListOfUpdate))
+                InitiateBellmanFord(this.ListOfUpdate);
             return;
         }//end of InitiateBellmanFord
+
+        public bool CheckForChange(List<int[]> distance, List<int[]> LoU)
+        {
+            for (int i = 0; i < distance.Count(); i++)
+            {
+                for (int j = 0; j < distance.Count(); j++)
+                {
+                    if (distance[i][j] != LoU[i][j])
+                        return false;
+                }
+            }
+            return true;
+        }
 
         public void InitiateDistanceMatrix()
         {
@@ -153,8 +169,11 @@ namespace AlgorithmProject.Algorithms
                 if (cost[i] + distance[i] < x)
                 {
                     x = cost[i] + distance[i];
-                    this.Path[node].Enqueue(i);
+                    this.Path[node].Enqueue(i - 1);
                 }
+                else
+                    this.Path[node].Enqueue(-1);
+                    this.Path[node].Enqueue(i + 1);
             }//end of loop
             return x;
         }//end of FindMin
@@ -184,11 +203,12 @@ namespace AlgorithmProject.Algorithms
             String s = "";
             foreach (Queue<int> x in this.Path)
             {
+                x.Reverse();
                 foreach (int i in x)
                 {
                     s += " " + i.ToString() + " ";
                 }
-                s += Environment.NewLine;
+                s += Environment.NewLine + Environment.NewLine;
             }
             System.Windows.Forms.MessageBox.Show(s);
         }

@@ -19,3 +19,9 @@ C:\Users\macka_000\Documents\Visual Studio 2012\Projects\AlgorithmProject\Algori
 C:\Users\macka_000\Source\Repos\AlgorithmProject\AlgorithmProject\bin\Debug\AlgorithmProject.exe.config
 C:\Users\macka_000\Source\Repos\AlgorithmProject\AlgorithmProject\obj\Debug\AlgorithmProject.exe
 C:\Users\macka_000\Source\Repos\AlgorithmProject\AlgorithmProject\obj\Debug\AlgorithmProject.pdb
+C:\Users\macka_000\Source\Repos\AlgorithmProject\AlgorithmProject\bin\Debug\AlgorithmProject.exe
+C:\Users\macka_000\Source\Repos\AlgorithmProject\AlgorithmProject\bin\Debug\AlgorithmProject.pdb
+C:\Users\macka_000\Source\Repos\AlgorithmProject\AlgorithmProject\obj\Debug\AlgorithmProject.csprojResolveAssemblyReference.cache
+C:\Users\macka_000\Source\Repos\AlgorithmProject\AlgorithmProject\obj\Debug\AlgorithmProject.Properties.Resources.resources
+C:\Users\macka_000\Source\Repos\AlgorithmProject\AlgorithmProject\obj\Debug\AlgorithmProject.RoutingAlgorithms.resources
+C:\Users\macka_000\Source\Repos\AlgorithmProject\AlgorithmProject\obj\Debug\AlgorithmProject.csproj.GenerateResource.Cache

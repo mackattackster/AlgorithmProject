@@ -13,6 +13,15 @@ namespace AlgorithmProject
 {
     public partial class RoutingAlgorithms : Form
     {
+        int R1_R2;
+        int R1_R3;
+        int R1_R4;
+        int R2_R6;
+        int R3_R4;
+        int R3_R5;
+        int R4_R6;
+        int R5_R6;
+
         public RoutingAlgorithms()
         {
             InitializeComponent();
@@ -20,16 +29,10 @@ namespace AlgorithmProject
 
         private void btnBellman_Click(object sender, EventArgs e)
         {
+            
             int i = 999;
             BellmanFord BF = new BellmanFord();
-            int R1_R2 = Int32.Parse(textBoxR1_R2.Text);
-            int R1_R3 = Int32.Parse(textBoxR1_R3.Text);
-            int R1_R4 = Int32.Parse(textBoxR1_R4.Text);
-            int R2_R6 = Int32.Parse(textBoxR2_R6.Text);
-            int R3_R4 = Int32.Parse(textBoxR3_R4.Text);
-            int R3_R5 = Int32.Parse(textBoxR3_R5.Text);
-            int R4_R6 = Int32.Parse(textBoxR4_R6.Text);
-            int R5_R6 = Int32.Parse(textBoxR5_R6.Text);
+            GetInput();
 
             BF.AddArray(new[] { 0, R1_R2, R1_R3, R1_R4, i, i });
             BF.AddArray(new[] { R1_R2, 0, i, i, i, R2_R6 });
@@ -39,22 +42,15 @@ namespace AlgorithmProject
             BF.AddArray(new[] { i, R2_R6, i, R4_R6, R5_R6, 0 });
 
             BF.StartBellmanFord();
-            this.textBoxBellmanDisplay.Text = BF.ListOfMatrix[1];
+            this.textBoxBellmanDisplay.Text = BF.ListOfMatrix.Last();
 
             this.textBoxIteration.Text = BF.iterationCount.ToString();
         }
 
         private void btnDijkstra_Click(object sender, EventArgs e)
         {            
-            int R1_R2 = Int32.Parse(textBoxR1_R2.Text);
-            int R1_R3 = Int32.Parse(textBoxR1_R3.Text);
-            int R1_R4 = Int32.Parse(textBoxR1_R4.Text);
-            int R2_R6 = Int32.Parse(textBoxR2_R6.Text);
-            int R3_R4 = Int32.Parse(textBoxR3_R4.Text);
-            int R3_R5 = Int32.Parse(textBoxR3_R5.Text);
-            int R4_R6 = Int32.Parse(textBoxR4_R6.Text);
-            int R5_R6 = Int32.Parse(textBoxR5_R6.Text);
-
+            GetInput();
+            String n = comboBoxDijkstra.Text;
             //nodes
             Objects.Node R1 = new Objects.Node("R1");
             Objects.Node R2 = new Objects.Node("R2");
@@ -107,7 +103,34 @@ namespace AlgorithmProject
             R6.AddEdge(EdgeR6toR4);
             R6.AddEdge(EdgeR6toR5);
 
-            Dijkstra DF = new Dijkstra(R5);
+            Objects.Node x = new Objects.Node("");
+
+            switch (n)
+            {
+                case "R1":
+                    x = R1;
+                    break;
+                case "R2":
+                    x = R2;
+                    break;
+                case "R3":
+                    x = R3;
+                    break;
+                case "R4":
+                    x = R4;
+                    break;
+                case "R5":
+                    x = R5;
+                    break;
+                case "R6":
+                    x = R6;
+                    break;
+                case "":
+                    MessageBox.Show("You did not select a node", "Missing Node", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    break;
+            }
+
+            Dijkstra DF = new Dijkstra(x);
 
             MessageBox.Show("R1: " + R1.NodeValue + "");
             MessageBox.Show("R2: " + R2.NodeValue + "");
@@ -117,8 +140,25 @@ namespace AlgorithmProject
             MessageBox.Show("R6: " + R6.NodeValue + "");
 
             List<String> s = DF.Routes;
-            for (int i = 0; i < s.Count; i++)
-                MessageBox.Show(s[i]);
+            String temp = "";
+            foreach (String route in s)
+            {
+                temp += route + Environment.NewLine;
+            }
+            this.textBoxDijkstraDisplay.Clear();
+            this.textBoxDijkstraDisplay.Text += temp;
+        }
+
+        public void GetInput()
+        {
+            R1_R2 = Int32.Parse(textBoxR1_R2.Text);
+            R1_R3 = Int32.Parse(textBoxR1_R3.Text);
+            R1_R4 = Int32.Parse(textBoxR1_R4.Text);
+            R2_R6 = Int32.Parse(textBoxR2_R6.Text);
+            R3_R4 = Int32.Parse(textBoxR3_R4.Text);
+            R3_R5 = Int32.Parse(textBoxR3_R5.Text);
+            R4_R6 = Int32.Parse(textBoxR4_R6.Text);
+            R5_R6 = Int32.Parse(textBoxR5_R6.Text);
         }
         
     }
