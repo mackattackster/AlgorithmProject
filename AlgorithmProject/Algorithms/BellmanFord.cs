@@ -22,6 +22,7 @@ namespace AlgorithmProject.Algorithms
             this.ListOfDistance = new List<int[]>();
             this.ListOfUpdate = new List<int[]>();
             this.ListOfMatrix = new List<String>();
+            this.Path = new List<List<Queue<int>>>();
         }
 
         public List<List<Queue<int>>> Path
@@ -84,6 +85,7 @@ namespace AlgorithmProject.Algorithms
                         //column are minimum distance
                         if (this.ListOfCost[i][k] + distance[k][j] < temp)
                             temp = this.ListOfCost[i][k] + distance[k][j];
+                        AddNodePath(i, k);
                     }
                     this.ListOfUpdate[i][j] = temp;
                 }
@@ -174,7 +176,15 @@ namespace AlgorithmProject.Algorithms
 
         public void AddNodePath(int StartNode, int EndNode)
         {
-            //finish this method later
+            if (this.Path.Count < 6)
+                this.Path.Add(new List<Queue<int>>());
+            if (this.Path[StartNode].Count < 6)
+                this.Path[StartNode].Add(new Queue<int>());
+            if (this.Path[StartNode][EndNode].Count != 0)
+                this.Path[StartNode][EndNode].Dequeue();
+
+            this.Path[StartNode][EndNode].Enqueue(StartNode);
+            this.Path[StartNode][EndNode].Enqueue(EndNode);
         }
                 
     }//end of class BellmanFord
