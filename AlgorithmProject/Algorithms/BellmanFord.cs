@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,8 +13,8 @@ namespace AlgorithmProject.Algorithms
         private List<int[]> _ListOfDistance;
         private List<int[]> _ListOfUpdate;
         private List<String> _ListOfMatrix;
+        private List<List<Queue<int>>> _Path;
         public int iterationCount;
-        private List<Queue<int>> _Path;
 
         public BellmanFord()
         {
@@ -21,10 +22,9 @@ namespace AlgorithmProject.Algorithms
             this.ListOfDistance = new List<int[]>();
             this.ListOfUpdate = new List<int[]>();
             this.ListOfMatrix = new List<String>();
-            this.Path = new List<Queue<int>>();
         }
 
-        public List<Queue<int>> Path
+        public List<List<Queue<int>>> Path
         {
             get { return _Path; }
             set { _Path = value; }
@@ -64,39 +64,42 @@ namespace AlgorithmProject.Algorithms
             iterationCount = 1;
             InitiateDistanceMatrix();
             InitiateUpdateMatrix();
-            InitiateBellmanFord(this.ListOfDistance);
-            PathToString();
+            SolveBellmanFord(this.ListOfDistance);
         }
 
-        public void InitiateBellmanFord(List<int[]> distance)
+        public void SolveBellmanFord(List<int[]> distance)
         {
-            for (int i = 0; i < distance.Count; i++)
+            //i is the Cost Matrix row and the Distance Matrix starting column
+            for (int i = 0; i < this.ListOfCost.Count; i++)
             {
-                this.Path.Add(new Queue<int>());
-                int[] cost = this.ListOfCost[i];
-                for (int j = 0; j < distance.Count; j++)
+                //j is the change in ListOfCost column and Distance Matrix row
+                for (int j = 0; j < distance[i].Length; j++)
                 {
-                    int x = FindMin(cost, DistanceMatrixColumn(distance, j), i);                    
-                    int[] temp = this.ListOfUpdate[i];
-                    this.ListOfUpdate[i][j] = x;
-
-                    temp[j] = x;
-                    this.ListOfUpdate[i] = temp;
-                }//end of inner loop
-
-            }//end of outer loop
+                    //sets temp to the sum of the ListOfCost and Distance Matrix
+                    //should be the distance you are trying to find the minimum of.
+                    int temp = this.ListOfCost[i][j] + distance[j][i];
+                    for (int k = 0; k < distance[i].Length; k++)
+                    {
+                        //checking if other sums of ListOfCost row and Distance 
+                        //column are minimum distance
+                        if (this.ListOfCost[i][k] + distance[k][j] < temp)
+                            temp = this.ListOfCost[i][k] + distance[k][j];
+                    }
+                    this.ListOfUpdate[i][j] = temp;
+                }
+            }
             MatrixIterationToString(this.ListOfUpdate);
             iterationCount++;
-            //checking if matrix contains infinity
+
             for (int i = 0; i < ListOfUpdate.Count; i++)
             {
                 if (ListOfUpdate[i].Contains(999))
-                    InitiateBellmanFord(this.ListOfUpdate);
-            }//end of for loop
+                    SolveBellmanFord(this.ListOfUpdate);
+            }
             if (!CheckForChange(distance, ListOfUpdate))
-                InitiateBellmanFord(this.ListOfUpdate);
+                SolveBellmanFord(this.ListOfUpdate);
             return;
-        }//end of InitiateBellmanFord
+        }
 
         public bool CheckForChange(List<int[]> distance, List<int[]> LoU)
         {
@@ -149,35 +152,6 @@ namespace AlgorithmProject.Algorithms
             }//end of outer loop
         }//end of InitiateUpdateMatrix
 
-        public int[] DistanceMatrixColumn(List<int[]> distance, int column)
-        {
-            int[] temp = new int[distance[0].Count()];
-
-            for (int i = 0; i < distance[0].Count(); i++)
-            {
-                temp[i] = distance[i][column];
-            }
-            return temp;
-        }//end of DistanceMatrixColumn
-
-        public int FindMin(int[] cost, int[] distance, int node)
-        {
-            int x = cost[0] + distance[0];
-
-            for (int i = 1; i < cost.Length; i++)
-            {
-                if (cost[i] + distance[i] < x)
-                {
-                    x = cost[i] + distance[i];
-                    this.Path[node].Enqueue(i - 1);
-                }
-                else
-                    this.Path[node].Enqueue(-1);
-                    this.Path[node].Enqueue(i + 1);
-            }//end of loop
-            return x;
-        }//end of FindMin
-
         public void MatrixIterationToString(List<int[]> iteration)
         {
             int count = iteration.Count();
@@ -198,20 +172,69 @@ namespace AlgorithmProject.Algorithms
             this.ListOfMatrix.Add(s);
         }//end of MatrixIterationToString
 
-        public void PathToString()
+        public void AddNodePath(int StartNode, int EndNode)
         {
-            String s = "";
-            foreach (Queue<int> x in this.Path)
-            {
-                x.Reverse();
-                foreach (int i in x)
-                {
-                    s += " " + i.ToString() + " ";
-                }
-                s += Environment.NewLine + Environment.NewLine;
-            }
-            System.Windows.Forms.MessageBox.Show(s);
+            //finish this method later
         }
-
+                
     }//end of class BellmanFord
 }//end of Namespace
+
+//public void InitiateBellmanFord(List<int[]> distance)
+//{
+//    for (int i = 0; i < distance.Count; i++)
+//    {
+//        this.Path.Add(new Queue<int>());
+//        int[] cost = this.ListOfCost[i];
+//        for (int j = 0; j < distance.Count; j++)
+//        {
+//            int x = FindMin(cost, DistanceMatrixColumn(distance, j), i);                    
+//            int[] temp = this.ListOfUpdate[i];
+//            this.ListOfUpdate[i][j] = x;
+
+//            temp[j] = x;
+//            this.ListOfUpdate[i] = temp;
+//        }//end of inner loop
+
+//    }//end of outer loop
+//    MatrixIterationToString(this.ListOfUpdate);
+//    iterationCount++;
+//    //checking if matrix contains infinity
+//    for (int i = 0; i < ListOfUpdate.Count; i++)
+//    {
+//        if (ListOfUpdate[i].Contains(999))
+//            InitiateBellmanFord(this.ListOfUpdate);
+//    }//end of for loop
+//    if (!CheckForChange(distance, ListOfUpdate))
+//        InitiateBellmanFord(this.ListOfUpdate);
+//    return;
+//}//end of InitiateBellmanFord
+
+//public int[] DistanceMatrixColumn(List<int[]> distance, int column)
+//{
+//    int[] temp = new int[distance[0].Count()];
+
+//    for (int i = 0; i < distance[0].Count(); i++)
+//    {
+//        temp[i] = distance[i][column];
+//    }
+//    return temp;
+//}//end of DistanceMatrixColumn
+
+//public int FindMin(int[] cost, int[] distance, int node)
+//{
+//    int x = cost[0] + distance[0];
+
+//    for (int i = 1; i < cost.Length; i++)
+//    {
+//        if (cost[i] + distance[i] < x)
+//        {
+//            x = cost[i] + distance[i];
+//            this.Path[node].Enqueue(i - 1);
+//        }
+//        else
+//            this.Path[node].Enqueue(-1);
+//            this.Path[node].Enqueue(i + 1);
+//    }//end of loop
+//    return x;
+//}//end of FindMin
