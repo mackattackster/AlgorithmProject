@@ -15,6 +15,7 @@ namespace AlgorithmProject.Algorithms
         private List<String> _ListOfMatrix;
         private List<List<Queue<int>>> _Path;
         public int iterationCount;
+        private string path;
 
         public BellmanFord()
         {
@@ -66,6 +67,7 @@ namespace AlgorithmProject.Algorithms
             InitiateDistanceMatrix();
             InitiateUpdateMatrix();
             SolveBellmanFord(this.ListOfDistance);
+            path = "";
         }
 
         public void SolveBellmanFord(List<int[]> distance)
@@ -84,8 +86,10 @@ namespace AlgorithmProject.Algorithms
                         //checking if other sums of ListOfCost row and Distance 
                         //column are minimum distance
                         if (this.ListOfCost[i][k] + distance[k][j] < temp)
+                        {
                             temp = this.ListOfCost[i][k] + distance[k][j];
-                        AddNodePath(i, k);
+                            AddNodePath(i, k);
+                        }
                     }
                     this.ListOfUpdate[i][j] = temp;
                 }
@@ -181,10 +185,53 @@ namespace AlgorithmProject.Algorithms
             if (this.Path[StartNode].Count < 6)
                 this.Path[StartNode].Add(new Queue<int>());
             if (this.Path[StartNode][EndNode].Count != 0)
+            {
                 this.Path[StartNode][EndNode].Dequeue();
+                this.Path[StartNode][EndNode].Dequeue();
+            }
 
             this.Path[StartNode][EndNode].Enqueue(StartNode);
             this.Path[StartNode][EndNode].Enqueue(EndNode);
+        }
+
+        public void NodeShortestPath()
+        {
+            //trying to get shortest distance for row 1
+            for (int i = 0; i < this.ListOfUpdate.Count; i++)
+            {
+                int x = getDistance(0, i);
+                if (x != 0)
+                {
+                    getPath(0, i, x);
+                }
+            }
+        }
+
+        public void getPath(int x, int y, int distance)
+        {
+            bool shortestPath = false;
+            int isDistance;
+            int minValue = 0;
+            int nextNode = 0;
+            path += x + " ";
+            while (shortestPath != true)
+            {
+                for (int i = 0; i < this.ListOfCost.Count; i++)
+                {
+                    if (this.ListOfCost[x][i] < distance && this.ListOfCost[x][i] != 0)
+                    {
+                        minValue = this.ListOfCost[x][i];
+                        nextNode = i;
+                    }
+                }
+                path += nextNode + " ";
+                
+            }
+        }
+
+        public int getDistance(int x, int y)
+        {
+            return this.ListOfUpdate[x][y];
         }
                 
     }//end of class BellmanFord

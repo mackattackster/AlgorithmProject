@@ -129,7 +129,7 @@ namespace AlgorithmProject
                     MessageBox.Show("You did not select a node", "Missing Node", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     break;
             }
-
+            
             Dijkstra DF = new Dijkstra(x);
 
             MessageBox.Show("R1: " + R1.NodeValue + "");
