@@ -10,6 +10,7 @@ namespace AlgorithmProject.Objects
     {
         private List<Edge> _listEdge;
         private List<Edge> _listParentEdge;
+        private List<Node> _DoNotGoToNodes;
         private String _NodeName;
         private Double _NodeValue;
 
@@ -17,6 +18,12 @@ namespace AlgorithmProject.Objects
         {
             get { return _NodeName; }
             set { _NodeName = value; }
+        }
+
+        public List<Node> DoNotGoToNodes
+        {
+            get { return _DoNotGoToNodes; }
+            set { _DoNotGoToNodes = value; }
         }
 
         public Double NodeValue
@@ -43,6 +50,8 @@ namespace AlgorithmProject.Objects
             this.listEdge = new List<Edge>();
             this.listParentEdge = new List<Edge>();
             this.NodeValue = 0.0;
+            this.DoNotGoToNodes = new List<Node>();
+            this.DoNotGoToNodes.Add(this);
         }
 
         public void AddEdge(Edge e)

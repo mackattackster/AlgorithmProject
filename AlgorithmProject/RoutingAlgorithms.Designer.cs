@@ -44,13 +44,28 @@
             this.textBoxBellmanDisplay = new System.Windows.Forms.TextBox();
             this.btnBellman = new System.Windows.Forms.Button();
             this.tabPageDijkstra = new System.Windows.Forms.TabPage();
-            this.textBoxDijkstraDisplay = new System.Windows.Forms.TextBox();
-            this.btnDijkstra = new System.Windows.Forms.Button();
+            this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.comboBoxDijkstra = new System.Windows.Forms.ComboBox();
+            this.btnDijkstra = new System.Windows.Forms.Button();
+            this.NodeName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Cost = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.NextHop = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Route = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Iterations = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Time = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridView2 = new System.Windows.Forms.DataGridView();
+            this.NodeNameBF = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.NextNodeBF = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.CostBF = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.RouteBF = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.IterationsBF = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.TimeBF = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tabControl.SuspendLayout();
             this.tabPageNetwork.SuspendLayout();
             this.tabPageBellmanFord.SuspendLayout();
             this.tabPageDijkstra.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
             this.SuspendLayout();
             // 
             // tabControl
@@ -168,6 +183,7 @@
             // 
             // tabPageBellmanFord
             // 
+            this.tabPageBellmanFord.Controls.Add(this.dataGridView2);
             this.tabPageBellmanFord.Controls.Add(this.textBoxIteration);
             this.tabPageBellmanFord.Controls.Add(this.textBoxBellmanDisplay);
             this.tabPageBellmanFord.Controls.Add(this.btnBellman);
@@ -183,7 +199,7 @@
             // 
             this.textBoxIteration.BackColor = System.Drawing.SystemColors.InactiveCaption;
             this.textBoxIteration.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.textBoxIteration.Location = new System.Drawing.Point(69, 147);
+            this.textBoxIteration.Location = new System.Drawing.Point(60, 129);
             this.textBoxIteration.Name = "textBoxIteration";
             this.textBoxIteration.Size = new System.Drawing.Size(55, 20);
             this.textBoxIteration.TabIndex = 2;
@@ -195,7 +211,7 @@
             this.textBoxBellmanDisplay.Location = new System.Drawing.Point(29, 17);
             this.textBoxBellmanDisplay.Multiline = true;
             this.textBoxBellmanDisplay.Name = "textBoxBellmanDisplay";
-            this.textBoxBellmanDisplay.Size = new System.Drawing.Size(134, 124);
+            this.textBoxBellmanDisplay.Size = new System.Drawing.Size(128, 106);
             this.textBoxBellmanDisplay.TabIndex = 1;
             // 
             // btnBellman
@@ -207,12 +223,12 @@
             this.btnBellman.TabIndex = 0;
             this.btnBellman.Text = "Calculate";
             this.btnBellman.UseVisualStyleBackColor = true;
-            this.btnBellman.Click += btnBellman_Click;
+            this.btnBellman.Click += new System.EventHandler(this.btnBellman_Click_1);
             // 
             // tabPageDijkstra
             // 
+            this.tabPageDijkstra.Controls.Add(this.dataGridView1);
             this.tabPageDijkstra.Controls.Add(this.comboBoxDijkstra);
-            this.tabPageDijkstra.Controls.Add(this.textBoxDijkstraDisplay);
             this.tabPageDijkstra.Controls.Add(this.btnDijkstra);
             this.tabPageDijkstra.Location = new System.Drawing.Point(4, 25);
             this.tabPageDijkstra.Name = "tabPageDijkstra";
@@ -222,27 +238,25 @@
             this.tabPageDijkstra.Text = "Dijkstra";
             this.tabPageDijkstra.UseVisualStyleBackColor = true;
             // 
-            // textBoxDijkstraDisplay
+            // dataGridView1
             // 
-            this.textBoxDijkstraDisplay.Location = new System.Drawing.Point(8, 6);
-            this.textBoxDijkstraDisplay.Multiline = true;
-            this.textBoxDijkstraDisplay.Name = "textBoxDijkstraDisplay";
-            this.textBoxDijkstraDisplay.Size = new System.Drawing.Size(327, 313);
-            this.textBoxDijkstraDisplay.TabIndex = 2;
-            // 
-            // btnDijkstra
-            // 
-            this.btnDijkstra.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.btnDijkstra.Location = new System.Drawing.Point(3, 352);
-            this.btnDijkstra.Name = "btnDijkstra";
-            this.btnDijkstra.Size = new System.Drawing.Size(806, 44);
-            this.btnDijkstra.TabIndex = 1;
-            this.btnDijkstra.Text = "Calculate";
-            this.btnDijkstra.UseVisualStyleBackColor = true;
-            this.btnDijkstra.Click += btnDijkstra_Click;
+            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.NodeName,
+            this.Cost,
+            this.NextHop,
+            this.Route,
+            this.Iterations,
+            this.Time});
+            this.dataGridView1.Location = new System.Drawing.Point(8, 32);
+            this.dataGridView1.Name = "dataGridView1";
+            this.dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dataGridView1.Size = new System.Drawing.Size(796, 178);
+            this.dataGridView1.TabIndex = 4;
             // 
             // comboBoxDijkstra
             // 
+            this.comboBoxDijkstra.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxDijkstra.FormattingEnabled = true;
             this.comboBoxDijkstra.Items.AddRange(new object[] {
             "R1",
@@ -255,7 +269,100 @@
             this.comboBoxDijkstra.Name = "comboBoxDijkstra";
             this.comboBoxDijkstra.Size = new System.Drawing.Size(121, 21);
             this.comboBoxDijkstra.TabIndex = 3;
-            this.comboBoxDijkstra.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            // 
+            // btnDijkstra
+            // 
+            this.btnDijkstra.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.btnDijkstra.Location = new System.Drawing.Point(3, 352);
+            this.btnDijkstra.Name = "btnDijkstra";
+            this.btnDijkstra.Size = new System.Drawing.Size(806, 44);
+            this.btnDijkstra.TabIndex = 1;
+            this.btnDijkstra.Text = "Calculate";
+            this.btnDijkstra.UseVisualStyleBackColor = true;
+            this.btnDijkstra.Click += new System.EventHandler(this.btnDijkstra_Click_1);
+            // 
+            // NodeName
+            // 
+            this.NodeName.HeaderText = "Node Name";
+            this.NodeName.Name = "NodeName";
+            this.NodeName.Width = 50;
+            // 
+            // Cost
+            // 
+            this.Cost.HeaderText = "Cost";
+            this.Cost.Name = "Cost";
+            this.Cost.Width = 50;
+            // 
+            // NextHop
+            // 
+            this.NextHop.HeaderText = "Next Hop";
+            this.NextHop.Name = "NextHop";
+            // 
+            // Route
+            // 
+            this.Route.HeaderText = "Route";
+            this.Route.Name = "Route";
+            this.Route.Width = 350;
+            // 
+            // Iterations
+            // 
+            this.Iterations.HeaderText = "Iterations";
+            this.Iterations.Name = "Iterations";
+            this.Iterations.Width = 60;
+            // 
+            // Time
+            // 
+            this.Time.HeaderText = "Time";
+            this.Time.Name = "Time";
+            // 
+            // dataGridView2
+            // 
+            this.dataGridView2.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView2.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.NodeNameBF,
+            this.NextNodeBF,
+            this.CostBF,
+            this.RouteBF,
+            this.IterationsBF,
+            this.TimeBF});
+            this.dataGridView2.Location = new System.Drawing.Point(8, 155);
+            this.dataGridView2.Name = "dataGridView2";
+            this.dataGridView2.Size = new System.Drawing.Size(796, 191);
+            this.dataGridView2.TabIndex = 3;
+            // 
+            // NodeNameBF
+            // 
+            this.NodeNameBF.HeaderText = "Node Name";
+            this.NodeNameBF.Name = "NodeNameBF";
+            this.NodeNameBF.Width = 50;
+            // 
+            // NextNodeBF
+            // 
+            this.NextNodeBF.HeaderText = "Next Node";
+            this.NextNodeBF.Name = "NextNodeBF";
+            this.NextNodeBF.Width = 50;
+            // 
+            // CostBF
+            // 
+            this.CostBF.HeaderText = "Cost";
+            this.CostBF.Name = "CostBF";
+            this.CostBF.Width = 50;
+            // 
+            // RouteBF
+            // 
+            this.RouteBF.HeaderText = "Route";
+            this.RouteBF.Name = "RouteBF";
+            this.RouteBF.Width = 400;
+            // 
+            // IterationsBF
+            // 
+            this.IterationsBF.HeaderText = "Iterations";
+            this.IterationsBF.Name = "IterationsBF";
+            // 
+            // TimeBF
+            // 
+            this.TimeBF.HeaderText = "Time";
+            this.TimeBF.Name = "TimeBF";
             // 
             // RoutingAlgorithms
             // 
@@ -273,7 +380,8 @@
             this.tabPageBellmanFord.ResumeLayout(false);
             this.tabPageBellmanFord.PerformLayout();
             this.tabPageDijkstra.ResumeLayout(false);
-            this.tabPageDijkstra.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -296,8 +404,21 @@
         private System.Windows.Forms.TextBox textBoxBellmanDisplay;
         private System.Windows.Forms.TextBox textBoxIteration;
         private System.Windows.Forms.Button btnDijkstra;
-        private System.Windows.Forms.TextBox textBoxDijkstraDisplay;
         private System.Windows.Forms.ComboBox comboBoxDijkstra;
+        private System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn NodeName;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Cost;
+        private System.Windows.Forms.DataGridViewTextBoxColumn NextHop;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Route;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Iterations;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Time;
+        private System.Windows.Forms.DataGridView dataGridView2;
+        private System.Windows.Forms.DataGridViewTextBoxColumn NodeNameBF;
+        private System.Windows.Forms.DataGridViewTextBoxColumn NextNodeBF;
+        private System.Windows.Forms.DataGridViewTextBoxColumn CostBF;
+        private System.Windows.Forms.DataGridViewTextBoxColumn RouteBF;
+        private System.Windows.Forms.DataGridViewTextBoxColumn IterationsBF;
+        private System.Windows.Forms.DataGridViewTextBoxColumn TimeBF;
     }
 }
 

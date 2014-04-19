@@ -15,6 +15,7 @@ namespace AlgorithmProject.Algorithms
         private List<String> _Routes;
         private List<String> _ListRouteDescription;
         private Node _NextNode;
+        private int _iterations;
 
         public List<Node> ListOfNodes
         {
@@ -52,6 +53,12 @@ namespace AlgorithmProject.Algorithms
             set { _RootNode = value; }
         }
 
+        public int iterations
+        {
+            get { return _iterations; }
+            set { _iterations = value; }
+        }
+
         public Dijkstra(Node RootNode)
         {
             this.RootNode = RootNode;
@@ -61,13 +68,14 @@ namespace AlgorithmProject.Algorithms
             this.ListRouteDescription = new List<String>();
             RootNode.NodeValue = 0;
             this.ListOfNodes.Add(RootNode);
-            //  this.BeenThereListOfNodes.Add(RootNode);
 
+            this.iterations = 0;
             FindChildrenMap2(RootNode);
         }
 
         public void FindChildrenMap2(Node node)
         {
+            this.iterations += this.iterations + 1;
             Node ParentNode = node;
 
             this.BeenThereListOfNodes.Add(ParentNode);
@@ -291,7 +299,7 @@ namespace AlgorithmProject.Algorithms
                 Node n = this.BeenThereListOfNodes[i];
 
                 findEntireRoute(n);
-                this.ListRouteDescription.Add("For " + n.NodeName + Environment.NewLine);
+                //this.ListRouteDescription.Add("For " + n.NodeName + Environment.NewLine);
                 this.ListRouteDescription.Reverse();
                 String CorrectDirectionalRoute = "";
                 for (int m = 0; m < this.ListRouteDescription.Count; m++)
@@ -313,18 +321,18 @@ namespace AlgorithmProject.Algorithms
             {
                 if (n.NodeName == this.RootNode.NodeName)
                 {
-                    this.ListRouteDescription.Add(this.RootNode.NodeName + " connects to " + n.NodeName + ". Length: " + n.NodeValue);
+                    this.ListRouteDescription.Add(this.RootNode.NodeName + " => " + n.NodeName + " = Length: " + n.NodeValue);
                 }
                 else
                 {
-                    this.ListRouteDescription.Add(this.RootNode.NodeName + " connects to " + n.NodeName + ". Length: " + n.listParentEdge[0].EdgeLength + ". " + Environment.NewLine);
+                    this.ListRouteDescription.Add(this.RootNode.NodeName + " => " + n.NodeName + " = Length: " + n.listParentEdge[0].EdgeLength + ". " + Environment.NewLine);
                 }
                 return;
             }
             else
             {
                 Node newNode = n.listParentEdge[0].Node;
-                this.ListRouteDescription.Add(newNode.NodeName + " connects to " + n.NodeName + ". Length: " + n.listParentEdge[0].EdgeLength + ". " + Environment.NewLine);
+                this.ListRouteDescription.Add(newNode.NodeName + " => " + n.NodeName + " = Length: " + n.listParentEdge[0].EdgeLength + ". " + Environment.NewLine);
 
                 findEntireRoute(newNode);
             }

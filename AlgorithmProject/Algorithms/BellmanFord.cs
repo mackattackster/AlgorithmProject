@@ -4,61 +4,34 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AlgorithmProject.Objects;
 
 namespace AlgorithmProject.Algorithms
 {
     class BellmanFord
     {
-        private List<int[]> _ListOfCost;
-        private List<int[]> _ListOfDistance;
-        private List<int[]> _ListOfUpdate;
-        private List<String> _ListOfMatrix;
-        private List<List<Queue<int>>> _Path;
-        public int iterationCount;
-        private string path;
+        private Node _RootNode, _NextNode;
+        private List<Node> _ListOfNodes, _BeenThereListOfNodes;
+        private List<String> _Routes, _ListRouteDescription, _ListOfMatrix;
+        private List<int[]> _ListOfCost, _ListOfDistance, _ListOfUpdate;
+        public int iterationCount;       
 
-        public BellmanFord()
+        public BellmanFord(Node RootNode)
         {
             this.ListOfCost = new List<int[]>();
             this.ListOfDistance = new List<int[]>();
             this.ListOfUpdate = new List<int[]>();
             this.ListOfMatrix = new List<String>();
-            this.Path = new List<List<Queue<int>>>();
-        }
-
-        public List<List<Queue<int>>> Path
-        {
-            get { return _Path; }
-            set { _Path = value; }
-        }
-
-        public List<String> ListOfMatrix
-        {
-            get { return _ListOfMatrix; }
-            set { _ListOfMatrix = value; }
-        }
-
-        public List<int[]> ListOfUpdate
-        {
-            get { return _ListOfUpdate; }
-            set { _ListOfUpdate = value; }
-        }
-
-        public List<int[]> ListOfCost
-        {
-            get { return _ListOfCost; }
-            set { _ListOfCost = value; }
-        }
-
-        public List<int[]> ListOfDistance
-        {
-            get { return _ListOfDistance; }
-            set { _ListOfDistance = value; }
-        }
-
-        public void AddArray(int[] cost)
-        {
-            this.ListOfCost.Add(cost);
+            //
+            this.RootNode = RootNode;
+            this.ListOfNodes = new List<Node>();
+            this.BeenThereListOfNodes = new List<Node>();
+            this.Routes = new List<String>();
+            this.ListRouteDescription = new List<String>();
+            RootNode.NodeValue = 0;
+            this.ListOfNodes.Add(RootNode);
+            //
+            FindChildrenMap2(RootNode);
         }
 
         public void StartBellmanFord()
@@ -67,11 +40,12 @@ namespace AlgorithmProject.Algorithms
             InitiateDistanceMatrix();
             InitiateUpdateMatrix();
             SolveBellmanFord(this.ListOfDistance);
-            path = "";
         }
 
         public void SolveBellmanFord(List<int[]> distance)
         {
+            System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
+            sw.Start();
             //i is the Cost Matrix row and the Distance Matrix starting column
             for (int i = 0; i < this.ListOfCost.Count; i++)
             {
@@ -88,7 +62,6 @@ namespace AlgorithmProject.Algorithms
                         if (this.ListOfCost[i][k] + distance[k][j] < temp)
                         {
                             temp = this.ListOfCost[i][k] + distance[k][j];
-                            AddNodePath(i, k);
                         }
                     }
                     this.ListOfUpdate[i][j] = temp;
@@ -104,6 +77,8 @@ namespace AlgorithmProject.Algorithms
             }
             if (!CheckForChange(distance, ListOfUpdate))
                 SolveBellmanFord(this.ListOfUpdate);
+            sw.Stop();
+            string stopwatch = sw.Elapsed.ToString();
             return;
         }
 
@@ -178,120 +153,357 @@ namespace AlgorithmProject.Algorithms
             this.ListOfMatrix.Add(s);
         }//end of MatrixIterationToString
 
-        public void AddNodePath(int StartNode, int EndNode)
+        #region DijkstraHelper
+        public void FindChildrenMap2(Node node)
         {
-            if (this.Path.Count < 6)
-                this.Path.Add(new List<Queue<int>>());
-            if (this.Path[StartNode].Count < 6)
-                this.Path[StartNode].Add(new Queue<int>());
-            if (this.Path[StartNode][EndNode].Count != 0)
+            Node ParentNode = node;
+
+            this.BeenThereListOfNodes.Add(ParentNode);
+            this.ListOfNodes.RemoveAt(0);
+
+            for (int w = 0; w < ParentNode.listEdge.Count; w++)
             {
-                this.Path[StartNode][EndNode].Dequeue();
-                this.Path[StartNode][EndNode].Dequeue();
+                //Add all new known child nodes to list
+                Node ChildNode = ParentNode.listEdge[w].Node;
+                bool bNextChildren = this.ListOfNodes.Any(x => x.NodeName == ChildNode.NodeName);
+                bool bCheckedChildren = this.BeenThereListOfNodes.Any(x => x.NodeName == ChildNode.NodeName);
+                if (!bNextChildren && !bCheckedChildren)
+                {
+                    this.ListOfNodes.Add(ChildNode);
+                    this.ListOfNodes = this.ListOfNodes.OrderBy(x => x.NodeValue).ToList();
+                }
+                else
+                {
+
+                }
+                // Remove Child nodes parent.
+                ChildNode.RemoveEdge(ParentNode);
+
+                Double ChildNodeValue = ParentNode.listEdge[w].EdgeLength + ParentNode.NodeValue;
+
+                // if the childNode has an existing value, but needs updating.
+                if (ChildNode.NodeValue > ChildNodeValue && ChildNode.NodeValue != 0)
+                {
+                    ChildNode.NodeValue = ChildNodeValue;
+                    DeleteOldEdge2(ChildNode, ParentNode);
+                }
+                else if (ChildNode.NodeValue == 0 || ParentNode.NodeValue == 0)
+                {
+                    ChildNode.NodeValue = ChildNodeValue;
+                    //check if any other beentherelist have connection to it, if yes then delete
+                    DeleteOldEdge3(ChildNode, ParentNode);
+                }
+
+                else
+                {
+                    ParentNode.RemoveEdge(ChildNode);
+                    //   ParentNode.listEdge[w].EdgeLength = -1;
+                }
             }
 
-            this.Path[StartNode][EndNode].Enqueue(StartNode);
-            this.Path[StartNode][EndNode].Enqueue(EndNode);
+            if (this.ListOfNodes.Count > 0)
+            {
+                this.ListOfNodes = this.ListOfNodes.OrderBy(x => x.NodeValue).ToList();
+                FindChildrenMap2(this.ListOfNodes[0]);
+            }
+            else
+            {
+                for (int i = 0; i < this.BeenThereListOfNodes.Count; i++)
+                {
+                    Node n = this.BeenThereListOfNodes[i];
+                    n.RemoveAllNegativeEdges();
+                }
+
+                CreateParentEdges();
+                FindRoutesForAllPoints();
+                return;
+            }
         }
 
-        public void NodeShortestPath()
+        public void FindChildrenMap(Node nodez)
         {
-            //trying to get shortest distance for row 1
-            for (int i = 0; i < this.ListOfUpdate.Count; i++)
+            // check r3 as parent
+            Node nn = nodez;
+
+            for (int w = 0; w < nn.listEdge.Count; w++)
             {
-                int x = getDistance(0, i);
-                if (x != 0)
+                Node NextNode = nn.listEdge[w].Node;
+                // is node already in list?
+                if (!IsInBeenThereList(NextNode))
                 {
-                    getPath(0, i, x);
+                    // if R5 to R6 remove R6 to R5
+                    NextNode.RemoveEdge(nn);
+                    //  DeleteOldEdge(NextNode, nn);
+                    //add to list
+                    this.ListOfNodes.Add(NextNode);
+                    this.BeenThereListOfNodes.Add(NextNode);
+
+                }
+                else
+                {
+                    //
+                    nn.RemoveEdge(NextNode);
+                    //    DeleteOldEdge(NextNode, nn);
+                }
+
+                Double potentialNodeValue = nn.listEdge[w].EdgeLength + nn.NodeValue;
+
+                if (NextNode.NodeValue > potentialNodeValue && NextNode.NodeValue != 0)
+                {
+                    NextNode.NodeValue = potentialNodeValue;
+                    DeleteOldEdge(NextNode, nn);
+                }
+                else if (NextNode.NodeValue == 0 || nn.NodeValue == 0)
+                {
+                    NextNode.NodeValue = potentialNodeValue;
+                }
+                else
+                {
+                    nn.listEdge[w].EdgeLength = -1;
+                }
+            }
+
+            if (this.ListOfNodes.Count > 0)
+            {
+                SortListOfNodes();
+                this.ListOfNodes.RemoveAt(0);
+
+                if (this.ListOfNodes.Count == 0)
+                {
+                    // Node NewNode = this.BeenThereListOfNodes[this.BeenThereListOfNodes.Count-1];
+                    // FindChildrenMap(NewNode);
+                    // this.BeenThereListOfNodes.Insert(0, this.RootNode);
+                    for (int i = 0; i < this.BeenThereListOfNodes.Count; i++)
+                    {
+                        Node n = this.BeenThereListOfNodes[i];
+                        n.RemoveAllNegativeEdges();
+                    }
+                    //CheckDuplicateChildrenChecker();
+                    // CreateParentEdges();
+                    //FindRoutesForAllPoints();
+                    return;
+                    // Done with child map. Just add parent map and method to call up the tree until its node :)
+                }
+
+                Node NewsNode = this.ListOfNodes[0];
+                FindChildrenMap(NewsNode);
+            }
+            else
+            {
+                //never get here
+                this.BeenThereListOfNodes.Insert(0, this.RootNode);
+                for (int i = 0; i < this.BeenThereListOfNodes.Count; i++)
+                {
+                    Node n = this.BeenThereListOfNodes[i];
+                    n.RemoveAllNegativeEdges();
+                }
+                // Done with child map. Just add parent map and method to call up the tree until its node :)
+
+                // CreateParentEdges();
+                //FindRoutesForAllPoints()
+                return;
+            }
+        }
+
+        public void CreateParentEdges()
+        {
+            for (int i = 0; i < this.BeenThereListOfNodes.Count; i++)
+            {
+                Node n = this.BeenThereListOfNodes[i];
+
+                for (int w = 0; w < n.listEdge.Count; w++)
+                {
+                    n.listEdge[w].Node.AddParentEdge(new Edge(n, n.listEdge[w].EdgeLength));
                 }
             }
         }
 
-        public void getPath(int x, int y, int distance)
+        public void DeleteOldEdge2(Node ChildNode, Node ParentNode)
         {
-            bool shortestPath = false;
-            int isDistance;
-            int minValue = 0;
-            int nextNode = 0;
-            path += x + " ";
-            while (shortestPath != true)
+            // ParentNode.RemoveEdge(ChildNode);
+            for (int i = 0; i < this.BeenThereListOfNodes.Count; i++)
             {
-                for (int i = 0; i < this.ListOfCost.Count; i++)
+                Node tParentNode = this.BeenThereListOfNodes[i];
+
+                for (int w = 0; w < tParentNode.listEdge.Count; w++)
                 {
-                    if (this.ListOfCost[x][i] < distance && this.ListOfCost[x][i] != 0)
+                    if (tParentNode.listEdge[w].Node.NodeName == ChildNode.NodeName && tParentNode.NodeName != ParentNode.NodeName)
                     {
-                        minValue = this.ListOfCost[x][i];
-                        nextNode = i;
+                        tParentNode.listEdge[w].EdgeLength = -1;
                     }
                 }
-                path += nextNode + " ";
-                
             }
         }
 
-        public int getDistance(int x, int y)
+        public void DeleteOldEdge3(Node ChildNode, Node ParentNode)
         {
-            return this.ListOfUpdate[x][y];
+            // ParentNode.RemoveEdge(ChildNode);
+            for (int i = 0; i < this.BeenThereListOfNodes.Count; i++)
+            {
+                Node tParentNode = this.BeenThereListOfNodes[i];
+
+                for (int w = 0; w < tParentNode.listEdge.Count; w++)
+                {
+                    if (tParentNode.listEdge[w].Node.NodeName == ChildNode.NodeName && tParentNode.NodeName != ParentNode.NodeName)
+                    {
+                        tParentNode.listEdge[w].EdgeLength = -1;
+                        ChildNode.RemoveEdge(tParentNode);
+                    }
+                }
+            }
         }
-                
+
+        public void DeleteOldEdge(Node nextNode, Node node)
+        {
+            for (int i = 0; i < this.BeenThereListOfNodes.Count; i++)
+            {
+                Node n = this.BeenThereListOfNodes[i];
+
+                for (int w = 0; w < n.listEdge.Count; w++)
+                {
+                    if (n.listEdge[w].Node.NodeName == node.NodeName)
+                    {
+                        //int tt = 0;
+                        //R5 kills connection to r3? so r3 must kill r5 here
+                        this.BeenThereListOfNodes[i].RemoveEdge(nextNode);
+                        //n.RemoveEdge(nextNode);
+                    }
+                }
+            }
+        }
+
+        public void FindRoutesForAllPoints()
+        {
+            for (int i = 0; i < this.BeenThereListOfNodes.Count; i++)
+            {
+                Node n = this.BeenThereListOfNodes[i];
+
+                findEntireRoute(n);
+                this.ListRouteDescription.Add("For " + n.NodeName + Environment.NewLine);
+                this.ListRouteDescription.Reverse();
+                String CorrectDirectionalRoute = "";
+                for (int m = 0; m < this.ListRouteDescription.Count; m++)
+                {
+                    CorrectDirectionalRoute += this.ListRouteDescription[m];
+
+                }
+
+                Routes.Add(CorrectDirectionalRoute);
+                CorrectDirectionalRoute = "";
+                this.ListRouteDescription.Clear();
+            }
+        }
+
+
+        public void findEntireRoute(Node n)
+        {
+            if (n.NodeName == this.RootNode.NodeName || n.listParentEdge[0].Node.NodeName == this.RootNode.NodeName)
+            {
+                if (n.NodeName == this.RootNode.NodeName)
+                {
+                    this.ListRouteDescription.Add(this.RootNode.NodeName + " connects to " + n.NodeName + ". Length: " + n.NodeValue);
+                }
+                else
+                {
+                    this.ListRouteDescription.Add(this.RootNode.NodeName + " connects to " + n.NodeName + ". Length: " + n.listParentEdge[0].EdgeLength + ". " + Environment.NewLine);
+                }
+                return;
+            }
+            else
+            {
+                Node newNode = n.listParentEdge[0].Node;
+                this.ListRouteDescription.Add(newNode.NodeName + " connects to " + n.NodeName + ". Length: " + n.listParentEdge[0].EdgeLength + ". " + Environment.NewLine);
+
+                findEntireRoute(newNode);
+            }
+        }
+
+        public void SortListOfNodes()
+        {
+            for (int i = 0; i < this.ListOfNodes.Count; i++)
+            {
+                this.ListOfNodes = ListOfNodes.OrderBy(x => x.NodeValue).ToList();
+            }
+        }
+
+        public Boolean IsInBeenThereList(Node node)
+        {
+            for (int i = 0; i < this.BeenThereListOfNodes.Count; i++)
+            {
+                if (this.BeenThereListOfNodes[i].NodeName.ToString() == node.NodeName.ToString())
+                    return true;
+            }
+            return false;
+        }
+        #endregion
+
+        #region Stuff
+        public List<String> ListOfMatrix
+        {
+            get { return _ListOfMatrix; }
+            set { _ListOfMatrix = value; }
+        }
+
+        public List<int[]> ListOfUpdate
+        {
+            get { return _ListOfUpdate; }
+            set { _ListOfUpdate = value; }
+        }
+
+        public List<int[]> ListOfCost
+        {
+            get { return _ListOfCost; }
+            set { _ListOfCost = value; }
+        }
+
+        public List<int[]> ListOfDistance
+        {
+            get { return _ListOfDistance; }
+            set { _ListOfDistance = value; }
+        }
+
+        public void AddArray(int[] cost)
+        {
+            this.ListOfCost.Add(cost);
+        }
+
+        public List<Node> ListOfNodes
+        {
+            get { return _ListOfNodes; }
+            set { _ListOfNodes = value; }
+        }
+
+        public Node NextNode
+        {
+            get { return _NextNode; }
+            set { _NextNode = value; }
+        }
+
+        public List<Node> BeenThereListOfNodes
+        {
+            get { return _BeenThereListOfNodes; }
+            set { _BeenThereListOfNodes = value; }
+        }
+
+        public List<String> Routes
+        {
+            get { return _Routes; }
+            set { _Routes = value; }
+        }
+
+        public List<String> ListRouteDescription
+        {
+            get { return _ListRouteDescription; }
+            set { _ListRouteDescription = value; }
+        }
+
+        public Node RootNode
+        {
+            get { return _RootNode; }
+            set { _RootNode = value; }
+        }
+        #endregion
+
     }//end of class BellmanFord
 }//end of Namespace
 
-//public void InitiateBellmanFord(List<int[]> distance)
-//{
-//    for (int i = 0; i < distance.Count; i++)
-//    {
-//        this.Path.Add(new Queue<int>());
-//        int[] cost = this.ListOfCost[i];
-//        for (int j = 0; j < distance.Count; j++)
-//        {
-//            int x = FindMin(cost, DistanceMatrixColumn(distance, j), i);                    
-//            int[] temp = this.ListOfUpdate[i];
-//            this.ListOfUpdate[i][j] = x;
-
-//            temp[j] = x;
-//            this.ListOfUpdate[i] = temp;
-//        }//end of inner loop
-
-//    }//end of outer loop
-//    MatrixIterationToString(this.ListOfUpdate);
-//    iterationCount++;
-//    //checking if matrix contains infinity
-//    for (int i = 0; i < ListOfUpdate.Count; i++)
-//    {
-//        if (ListOfUpdate[i].Contains(999))
-//            InitiateBellmanFord(this.ListOfUpdate);
-//    }//end of for loop
-//    if (!CheckForChange(distance, ListOfUpdate))
-//        InitiateBellmanFord(this.ListOfUpdate);
-//    return;
-//}//end of InitiateBellmanFord
-
-//public int[] DistanceMatrixColumn(List<int[]> distance, int column)
-//{
-//    int[] temp = new int[distance[0].Count()];
-
-//    for (int i = 0; i < distance[0].Count(); i++)
-//    {
-//        temp[i] = distance[i][column];
-//    }
-//    return temp;
-//}//end of DistanceMatrixColumn
-
-//public int FindMin(int[] cost, int[] distance, int node)
-//{
-//    int x = cost[0] + distance[0];
-
-//    for (int i = 1; i < cost.Length; i++)
-//    {
-//        if (cost[i] + distance[i] < x)
-//        {
-//            x = cost[i] + distance[i];
-//            this.Path[node].Enqueue(i - 1);
-//        }
-//        else
-//            this.Path[node].Enqueue(-1);
-//            this.Path[node].Enqueue(i + 1);
-//    }//end of loop
-//    return x;
-//}//end of FindMin
