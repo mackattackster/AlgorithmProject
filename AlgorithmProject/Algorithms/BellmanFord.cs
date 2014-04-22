@@ -31,12 +31,12 @@ namespace AlgorithmProject.Algorithms
             RootNode.NodeValue = 0;
             this.ListOfNodes.Add(RootNode);
             //
-            FindChildrenMap2(RootNode);
+            ChildrenMapping2(RootNode);
         }
 
         public void StartBellmanFord()
         {
-            iterationCount = 1;
+            iterationCount = 0;
             InitiateDistanceMatrix();
             InitiateUpdateMatrix();
             SolveBellmanFord(this.ListOfDistance);
@@ -73,10 +73,16 @@ namespace AlgorithmProject.Algorithms
             for (int i = 0; i < ListOfUpdate.Count; i++)
             {
                 if (ListOfUpdate[i].Contains(999))
+                {
                     SolveBellmanFord(this.ListOfUpdate);
+                    iterationCount++;
+                }
             }
             if (!CheckForChange(distance, ListOfUpdate))
+            {
                 SolveBellmanFord(this.ListOfUpdate);
+                iterationCount++;
+            }
             sw.Stop();
             string stopwatch = sw.Elapsed.ToString();
             return;
@@ -153,8 +159,9 @@ namespace AlgorithmProject.Algorithms
             this.ListOfMatrix.Add(s);
         }//end of MatrixIterationToString
 
-        #region DijkstraHelper
-        public void FindChildrenMap2(Node node)
+        #region PathHelper
+
+        public void ChildrenMapping2(Node node)
         {
             Node ParentNode = node;
 
@@ -185,13 +192,13 @@ namespace AlgorithmProject.Algorithms
                 if (ChildNode.NodeValue > ChildNodeValue && ChildNode.NodeValue != 0)
                 {
                     ChildNode.NodeValue = ChildNodeValue;
-                    DeleteOldEdge2(ChildNode, ParentNode);
+                    RemoveBadEdge2(ChildNode, ParentNode);
                 }
                 else if (ChildNode.NodeValue == 0 || ParentNode.NodeValue == 0)
                 {
                     ChildNode.NodeValue = ChildNodeValue;
                     //check if any other beentherelist have connection to it, if yes then delete
-                    DeleteOldEdge3(ChildNode, ParentNode);
+                    RemoveBadEdge3(ChildNode, ParentNode);
                 }
 
                 else
@@ -204,7 +211,7 @@ namespace AlgorithmProject.Algorithms
             if (this.ListOfNodes.Count > 0)
             {
                 this.ListOfNodes = this.ListOfNodes.OrderBy(x => x.NodeValue).ToList();
-                FindChildrenMap2(this.ListOfNodes[0]);
+                ChildrenMapping2(this.ListOfNodes[0]);
             }
             else
             {
@@ -214,13 +221,13 @@ namespace AlgorithmProject.Algorithms
                     n.RemoveAllNegativeEdges();
                 }
 
-                CreateParentEdges();
-                FindRoutesForAllPoints();
+                AddParentEdges();
+                FindEachNodeRoute();
                 return;
             }
         }
 
-        public void FindChildrenMap(Node nodez)
+        public void ChildrenMapping(Node nodez)
         {
             // check r3 as parent
             Node nn = nodez;
@@ -229,7 +236,7 @@ namespace AlgorithmProject.Algorithms
             {
                 Node NextNode = nn.listEdge[w].Node;
                 // is node already in list?
-                if (!IsInBeenThereList(NextNode))
+                if (!BeenThereAlready(NextNode))
                 {
                     // if R5 to R6 remove R6 to R5
                     NextNode.RemoveEdge(nn);
@@ -251,7 +258,7 @@ namespace AlgorithmProject.Algorithms
                 if (NextNode.NodeValue > potentialNodeValue && NextNode.NodeValue != 0)
                 {
                     NextNode.NodeValue = potentialNodeValue;
-                    DeleteOldEdge(NextNode, nn);
+                    RemoveBadEdge(NextNode, nn);
                 }
                 else if (NextNode.NodeValue == 0 || nn.NodeValue == 0)
                 {
@@ -265,7 +272,7 @@ namespace AlgorithmProject.Algorithms
 
             if (this.ListOfNodes.Count > 0)
             {
-                SortListOfNodes();
+                SortNodeList();
                 this.ListOfNodes.RemoveAt(0);
 
                 if (this.ListOfNodes.Count == 0)
@@ -286,7 +293,7 @@ namespace AlgorithmProject.Algorithms
                 }
 
                 Node NewsNode = this.ListOfNodes[0];
-                FindChildrenMap(NewsNode);
+                ChildrenMapping(NewsNode);
             }
             else
             {
@@ -305,7 +312,7 @@ namespace AlgorithmProject.Algorithms
             }
         }
 
-        public void CreateParentEdges()
+        public void AddParentEdges()
         {
             for (int i = 0; i < this.BeenThereListOfNodes.Count; i++)
             {
@@ -318,7 +325,7 @@ namespace AlgorithmProject.Algorithms
             }
         }
 
-        public void DeleteOldEdge2(Node ChildNode, Node ParentNode)
+        public void RemoveBadEdge2(Node ChildNode, Node ParentNode)
         {
             // ParentNode.RemoveEdge(ChildNode);
             for (int i = 0; i < this.BeenThereListOfNodes.Count; i++)
@@ -335,7 +342,7 @@ namespace AlgorithmProject.Algorithms
             }
         }
 
-        public void DeleteOldEdge3(Node ChildNode, Node ParentNode)
+        public void RemoveBadEdge3(Node ChildNode, Node ParentNode)
         {
             // ParentNode.RemoveEdge(ChildNode);
             for (int i = 0; i < this.BeenThereListOfNodes.Count; i++)
@@ -353,7 +360,7 @@ namespace AlgorithmProject.Algorithms
             }
         }
 
-        public void DeleteOldEdge(Node nextNode, Node node)
+        public void RemoveBadEdge(Node nextNode, Node node)
         {
             for (int i = 0; i < this.BeenThereListOfNodes.Count; i++)
             {
@@ -372,14 +379,14 @@ namespace AlgorithmProject.Algorithms
             }
         }
 
-        public void FindRoutesForAllPoints()
+        public void FindEachNodeRoute()
         {
             for (int i = 0; i < this.BeenThereListOfNodes.Count; i++)
             {
                 Node n = this.BeenThereListOfNodes[i];
 
-                findEntireRoute(n);
-                this.ListRouteDescription.Add("For " + n.NodeName + Environment.NewLine);
+                FindEveryRoute(n);
+                //this.ListRouteDescription.Add("For " + n.NodeName + Environment.NewLine);
                 this.ListRouteDescription.Reverse();
                 String CorrectDirectionalRoute = "";
                 for (int m = 0; m < this.ListRouteDescription.Count; m++)
@@ -395,30 +402,30 @@ namespace AlgorithmProject.Algorithms
         }
 
 
-        public void findEntireRoute(Node n)
+        public void FindEveryRoute(Node n)
         {
             if (n.NodeName == this.RootNode.NodeName || n.listParentEdge[0].Node.NodeName == this.RootNode.NodeName)
             {
                 if (n.NodeName == this.RootNode.NodeName)
                 {
-                    this.ListRouteDescription.Add(this.RootNode.NodeName + " connects to " + n.NodeName + ". Length: " + n.NodeValue);
+                    this.ListRouteDescription.Add(this.RootNode.NodeName + " => " + n.NodeName + ". Length: " + n.NodeValue);
                 }
                 else
                 {
-                    this.ListRouteDescription.Add(this.RootNode.NodeName + " connects to " + n.NodeName + ". Length: " + n.listParentEdge[0].EdgeLength + ". " + Environment.NewLine);
+                    this.ListRouteDescription.Add(this.RootNode.NodeName + " => " + n.NodeName + ". Length: " + n.listParentEdge[0].EdgeLength + ". " + Environment.NewLine);
                 }
                 return;
             }
             else
             {
                 Node newNode = n.listParentEdge[0].Node;
-                this.ListRouteDescription.Add(newNode.NodeName + " connects to " + n.NodeName + ". Length: " + n.listParentEdge[0].EdgeLength + ". " + Environment.NewLine);
+                this.ListRouteDescription.Add(newNode.NodeName + " => " + n.NodeName + ". Length: " + n.listParentEdge[0].EdgeLength + ". " + Environment.NewLine);
 
-                findEntireRoute(newNode);
+                FindEveryRoute(newNode);
             }
         }
 
-        public void SortListOfNodes()
+        public void SortNodeList()
         {
             for (int i = 0; i < this.ListOfNodes.Count; i++)
             {
@@ -426,7 +433,7 @@ namespace AlgorithmProject.Algorithms
             }
         }
 
-        public Boolean IsInBeenThereList(Node node)
+        public Boolean BeenThereAlready(Node node)
         {
             for (int i = 0; i < this.BeenThereListOfNodes.Count; i++)
             {

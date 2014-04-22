@@ -40,7 +40,7 @@
             this.textBoxR3_R5 = new System.Windows.Forms.TextBox();
             this.textBoxR1_R3 = new System.Windows.Forms.TextBox();
             this.tabPageBellmanFord = new System.Windows.Forms.TabPage();
-            this.textBoxIteration = new System.Windows.Forms.TextBox();
+            this.dataGridView2 = new System.Windows.Forms.DataGridView();
             this.textBoxBellmanDisplay = new System.Windows.Forms.TextBox();
             this.btnBellman = new System.Windows.Forms.Button();
             this.tabPageDijkstra = new System.Windows.Forms.TabPage();
@@ -53,7 +53,6 @@
             this.Route = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Iterations = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Time = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataGridView2 = new System.Windows.Forms.DataGridView();
             this.NodeNameBF = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.NextNodeBF = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.CostBF = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -63,9 +62,9 @@
             this.tabControl.SuspendLayout();
             this.tabPageNetwork.SuspendLayout();
             this.tabPageBellmanFord.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
             this.tabPageDijkstra.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
             this.SuspendLayout();
             // 
             // tabControl
@@ -184,7 +183,6 @@
             // tabPageBellmanFord
             // 
             this.tabPageBellmanFord.Controls.Add(this.dataGridView2);
-            this.tabPageBellmanFord.Controls.Add(this.textBoxIteration);
             this.tabPageBellmanFord.Controls.Add(this.textBoxBellmanDisplay);
             this.tabPageBellmanFord.Controls.Add(this.btnBellman);
             this.tabPageBellmanFord.Location = new System.Drawing.Point(4, 25);
@@ -195,20 +193,26 @@
             this.tabPageBellmanFord.Text = "Bellman-Ford";
             this.tabPageBellmanFord.UseVisualStyleBackColor = true;
             // 
-            // textBoxIteration
+            // dataGridView2
             // 
-            this.textBoxIteration.BackColor = System.Drawing.SystemColors.InactiveCaption;
-            this.textBoxIteration.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.textBoxIteration.Location = new System.Drawing.Point(60, 129);
-            this.textBoxIteration.Name = "textBoxIteration";
-            this.textBoxIteration.Size = new System.Drawing.Size(55, 20);
-            this.textBoxIteration.TabIndex = 2;
+            this.dataGridView2.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView2.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.NodeNameBF,
+            this.NextNodeBF,
+            this.CostBF,
+            this.RouteBF,
+            this.IterationsBF,
+            this.TimeBF});
+            this.dataGridView2.Location = new System.Drawing.Point(8, 155);
+            this.dataGridView2.Name = "dataGridView2";
+            this.dataGridView2.Size = new System.Drawing.Size(796, 191);
+            this.dataGridView2.TabIndex = 3;
             // 
             // textBoxBellmanDisplay
             // 
             this.textBoxBellmanDisplay.BackColor = System.Drawing.SystemColors.InactiveCaption;
             this.textBoxBellmanDisplay.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.textBoxBellmanDisplay.Location = new System.Drawing.Point(29, 17);
+            this.textBoxBellmanDisplay.Location = new System.Drawing.Point(357, 27);
             this.textBoxBellmanDisplay.Multiline = true;
             this.textBoxBellmanDisplay.Name = "textBoxBellmanDisplay";
             this.textBoxBellmanDisplay.Size = new System.Drawing.Size(128, 106);
@@ -297,12 +301,13 @@
             // 
             this.NextHop.HeaderText = "Next Hop";
             this.NextHop.Name = "NextHop";
+            this.NextHop.Width = 75;
             // 
             // Route
             // 
             this.Route.HeaderText = "Route";
             this.Route.Name = "Route";
-            this.Route.Width = 350;
+            this.Route.Width = 400;
             // 
             // Iterations
             // 
@@ -314,21 +319,7 @@
             // 
             this.Time.HeaderText = "Time";
             this.Time.Name = "Time";
-            // 
-            // dataGridView2
-            // 
-            this.dataGridView2.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView2.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.NodeNameBF,
-            this.NextNodeBF,
-            this.CostBF,
-            this.RouteBF,
-            this.IterationsBF,
-            this.TimeBF});
-            this.dataGridView2.Location = new System.Drawing.Point(8, 155);
-            this.dataGridView2.Name = "dataGridView2";
-            this.dataGridView2.Size = new System.Drawing.Size(796, 191);
-            this.dataGridView2.TabIndex = 3;
+            this.Time.Width = 115;
             // 
             // NodeNameBF
             // 
@@ -338,7 +329,7 @@
             // 
             // NextNodeBF
             // 
-            this.NextNodeBF.HeaderText = "Next Node";
+            this.NextNodeBF.HeaderText = "Next Hop";
             this.NextNodeBF.Name = "NextNodeBF";
             this.NextNodeBF.Width = 50;
             // 
@@ -379,9 +370,9 @@
             this.tabPageNetwork.PerformLayout();
             this.tabPageBellmanFord.ResumeLayout(false);
             this.tabPageBellmanFord.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).EndInit();
             this.tabPageDijkstra.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -402,16 +393,9 @@
         private System.Windows.Forms.TextBox textBoxR3_R5;
         private System.Windows.Forms.Button btnBellman;
         private System.Windows.Forms.TextBox textBoxBellmanDisplay;
-        private System.Windows.Forms.TextBox textBoxIteration;
         private System.Windows.Forms.Button btnDijkstra;
         private System.Windows.Forms.ComboBox comboBoxDijkstra;
         private System.Windows.Forms.DataGridView dataGridView1;
-        private System.Windows.Forms.DataGridViewTextBoxColumn NodeName;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Cost;
-        private System.Windows.Forms.DataGridViewTextBoxColumn NextHop;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Route;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Iterations;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Time;
         private System.Windows.Forms.DataGridView dataGridView2;
         private System.Windows.Forms.DataGridViewTextBoxColumn NodeNameBF;
         private System.Windows.Forms.DataGridViewTextBoxColumn NextNodeBF;
@@ -419,6 +403,12 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn RouteBF;
         private System.Windows.Forms.DataGridViewTextBoxColumn IterationsBF;
         private System.Windows.Forms.DataGridViewTextBoxColumn TimeBF;
+        private System.Windows.Forms.DataGridViewTextBoxColumn NodeName;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Cost;
+        private System.Windows.Forms.DataGridViewTextBoxColumn NextHop;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Route;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Iterations;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Time;
     }
 }
 

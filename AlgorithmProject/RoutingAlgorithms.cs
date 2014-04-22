@@ -231,7 +231,7 @@ namespace AlgorithmProject
             BF.StartBellmanFord();
             sw.Stop();
             this.textBoxBellmanDisplay.Text = BF.ListOfMatrix.Last();           
-            this.textBoxIteration.Text = BF.iterationCount.ToString();
+            //this.textBoxIteration.Text = BF.iterationCount.ToString();
 
             for (int j = 0; j < BF.BeenThereListOfNodes.Count; j++)
             {
