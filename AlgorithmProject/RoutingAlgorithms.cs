@@ -148,7 +148,7 @@ namespace AlgorithmProject
                 
                 this.dataGridView1.Rows.Insert(i, new string[] {
         DF.BeenThereListOfNodes[i].NodeName,
-     DF.BeenThereListOfNodes[i].NodeValue.ToString(), nextHop.Substring(5,4) ,
+     DF.BeenThereListOfNodes[i].NodeValue.ToString() ,nextHop.Substring(5,4) ,
     s[i].ToString(),
     DF.iterations.ToString(),
     sw.Elapsed.ToString()
@@ -240,7 +240,7 @@ namespace AlgorithmProject
 
                 this.dataGridView2.Rows.Insert(j, new string[] {
         BF.BeenThereListOfNodes[j].NodeName,
-     BF.BeenThereListOfNodes[j].NodeValue.ToString(), nextHop.Substring(5,4) ,
+     nextHop.Substring(5,4), BF.BeenThereListOfNodes[j].NodeValue.ToString() ,
     s[j].ToString(),
     BF.iterationCount.ToString(),
     sw.Elapsed.ToString()

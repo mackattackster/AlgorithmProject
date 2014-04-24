@@ -75,13 +75,13 @@ namespace AlgorithmProject.Algorithms
                 if (ListOfUpdate[i].Contains(999))
                 {
                     SolveBellmanFord(this.ListOfUpdate);
-                    iterationCount++;
+                    //iterationCount++;
                 }
             }
             if (!CheckForChange(distance, ListOfUpdate))
             {
                 SolveBellmanFord(this.ListOfUpdate);
-                iterationCount++;
+                //iterationCount++;
             }
             sw.Stop();
             string stopwatch = sw.Elapsed.ToString();
@@ -444,7 +444,7 @@ namespace AlgorithmProject.Algorithms
         }
         #endregion
 
-        #region Stuff
+        #region Getters/Setters
         public List<String> ListOfMatrix
         {
             get { return _ListOfMatrix; }

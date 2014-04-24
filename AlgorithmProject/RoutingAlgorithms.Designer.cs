@@ -45,14 +45,14 @@
             this.btnBellman = new System.Windows.Forms.Button();
             this.tabPageDijkstra = new System.Windows.Forms.TabPage();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.comboBoxDijkstra = new System.Windows.Forms.ComboBox();
-            this.btnDijkstra = new System.Windows.Forms.Button();
             this.NodeName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Cost = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.NextHop = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Route = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Iterations = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Time = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.comboBoxDijkstra = new System.Windows.Forms.ComboBox();
+            this.btnDijkstra = new System.Windows.Forms.Button();
             this.NodeNameBF = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.NextNodeBF = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.CostBF = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -258,33 +258,6 @@
             this.dataGridView1.Size = new System.Drawing.Size(796, 178);
             this.dataGridView1.TabIndex = 4;
             // 
-            // comboBoxDijkstra
-            // 
-            this.comboBoxDijkstra.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxDijkstra.FormattingEnabled = true;
-            this.comboBoxDijkstra.Items.AddRange(new object[] {
-            "R1",
-            "R2",
-            "R3",
-            "R4",
-            "R5",
-            "R6"});
-            this.comboBoxDijkstra.Location = new System.Drawing.Point(353, 6);
-            this.comboBoxDijkstra.Name = "comboBoxDijkstra";
-            this.comboBoxDijkstra.Size = new System.Drawing.Size(121, 21);
-            this.comboBoxDijkstra.TabIndex = 3;
-            // 
-            // btnDijkstra
-            // 
-            this.btnDijkstra.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.btnDijkstra.Location = new System.Drawing.Point(3, 352);
-            this.btnDijkstra.Name = "btnDijkstra";
-            this.btnDijkstra.Size = new System.Drawing.Size(806, 44);
-            this.btnDijkstra.TabIndex = 1;
-            this.btnDijkstra.Text = "Calculate";
-            this.btnDijkstra.UseVisualStyleBackColor = true;
-            this.btnDijkstra.Click += new System.EventHandler(this.btnDijkstra_Click_1);
-            // 
             // NodeName
             // 
             this.NodeName.HeaderText = "Node Name";
@@ -320,6 +293,33 @@
             this.Time.HeaderText = "Time";
             this.Time.Name = "Time";
             this.Time.Width = 115;
+            // 
+            // comboBoxDijkstra
+            // 
+            this.comboBoxDijkstra.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxDijkstra.FormattingEnabled = true;
+            this.comboBoxDijkstra.Items.AddRange(new object[] {
+            "R1",
+            "R2",
+            "R3",
+            "R4",
+            "R5",
+            "R6"});
+            this.comboBoxDijkstra.Location = new System.Drawing.Point(353, 6);
+            this.comboBoxDijkstra.Name = "comboBoxDijkstra";
+            this.comboBoxDijkstra.Size = new System.Drawing.Size(121, 21);
+            this.comboBoxDijkstra.TabIndex = 3;
+            // 
+            // btnDijkstra
+            // 
+            this.btnDijkstra.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.btnDijkstra.Location = new System.Drawing.Point(3, 352);
+            this.btnDijkstra.Name = "btnDijkstra";
+            this.btnDijkstra.Size = new System.Drawing.Size(806, 44);
+            this.btnDijkstra.TabIndex = 1;
+            this.btnDijkstra.Text = "Calculate";
+            this.btnDijkstra.UseVisualStyleBackColor = true;
+            this.btnDijkstra.Click += new System.EventHandler(this.btnDijkstra_Click_1);
             // 
             // NodeNameBF
             // 
@@ -397,18 +397,18 @@
         private System.Windows.Forms.ComboBox comboBoxDijkstra;
         private System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.DataGridView dataGridView2;
-        private System.Windows.Forms.DataGridViewTextBoxColumn NodeNameBF;
-        private System.Windows.Forms.DataGridViewTextBoxColumn NextNodeBF;
-        private System.Windows.Forms.DataGridViewTextBoxColumn CostBF;
-        private System.Windows.Forms.DataGridViewTextBoxColumn RouteBF;
-        private System.Windows.Forms.DataGridViewTextBoxColumn IterationsBF;
-        private System.Windows.Forms.DataGridViewTextBoxColumn TimeBF;
         private System.Windows.Forms.DataGridViewTextBoxColumn NodeName;
         private System.Windows.Forms.DataGridViewTextBoxColumn Cost;
         private System.Windows.Forms.DataGridViewTextBoxColumn NextHop;
         private System.Windows.Forms.DataGridViewTextBoxColumn Route;
         private System.Windows.Forms.DataGridViewTextBoxColumn Iterations;
         private System.Windows.Forms.DataGridViewTextBoxColumn Time;
+        private System.Windows.Forms.DataGridViewTextBoxColumn NodeNameBF;
+        private System.Windows.Forms.DataGridViewTextBoxColumn NextNodeBF;
+        private System.Windows.Forms.DataGridViewTextBoxColumn CostBF;
+        private System.Windows.Forms.DataGridViewTextBoxColumn RouteBF;
+        private System.Windows.Forms.DataGridViewTextBoxColumn IterationsBF;
+        private System.Windows.Forms.DataGridViewTextBoxColumn TimeBF;
     }
 }
 
