@@ -162,62 +162,93 @@ namespace AlgorithmProject
         {
             dataGridView2.Rows.Clear();
             GetInput();
+            String n = comboBoxBellman.Text;
 
-            Objects.Node R1 = new Objects.Node("R1");
-            Objects.Node R2 = new Objects.Node("R2");
-            Objects.Node R3 = new Objects.Node("R3");
-            Objects.Node R4 = new Objects.Node("R4");
-            Objects.Node R5 = new Objects.Node("R5");
-            Objects.Node R6 = new Objects.Node("R6");
+            #region create network topology
+            Node R1 = new Node("R1");
+            Node R2 = new Node("R2");
+            Node R3 = new Node("R3");
+            Node R4 = new Node("R4");
+            Node R5 = new Node("R5");
+            Node R6 = new Node("R6");
 
             //R1 Edges
-            Objects.Edge EdgeR1toR3 = new Objects.Edge(R3, R1_R3);
-            Objects.Edge EdgeR1toR2 = new Objects.Edge(R2, R1_R2);
-            Objects.Edge EdgeR1toR4 = new Objects.Edge(R4, R1_R4);
+            Edge EdgeR1toR3 = new Edge(R3, R1_R3);
+            Edge EdgeR1toR2 = new Edge(R2, R1_R2);
+            Edge EdgeR1toR4 = new Edge(R4, R1_R4);
             R1.AddEdge(EdgeR1toR3);
             R1.AddEdge(EdgeR1toR2);
             R1.AddEdge(EdgeR1toR4);
 
             //R2 Edges
-            Objects.Edge EdgeR2toR1 = new Objects.Edge(R1, R1_R2);
-            Objects.Edge EdgeR2toR6 = new Objects.Edge(R6, R2_R6);
+            Edge EdgeR2toR1 = new Edge(R1, R1_R2);
+            Edge EdgeR2toR6 = new Edge(R6, R2_R6);
             R2.AddEdge(EdgeR2toR1);
             R2.AddEdge(EdgeR2toR6);
 
             //R3 Edges
-            Objects.Edge EdgeR3toR1 = new Objects.Edge(R1, R1_R3);
-            Objects.Edge EdgeR3toR4 = new Objects.Edge(R4, R3_R4);
-            Objects.Edge EdgeR3toR5 = new Objects.Edge(R5, R3_R5);
+            Edge EdgeR3toR1 = new Edge(R1, R1_R3);
+            Edge EdgeR3toR4 = new Edge(R4, R3_R4);
+            Edge EdgeR3toR5 = new Edge(R5, R3_R5);
             R3.AddEdge(EdgeR3toR1);
             R3.AddEdge(EdgeR3toR4);
             R3.AddEdge(EdgeR3toR5);
 
             //R4 Edges
-            Objects.Edge EdgeR4toR1 = new Objects.Edge(R1, R1_R4);
-            Objects.Edge EdgeR4toR3 = new Objects.Edge(R3, R3_R4);
-            Objects.Edge EdgeR4toR6 = new Objects.Edge(R6, R4_R6);
+            Edge EdgeR4toR1 = new Edge(R1, R1_R4);
+            Edge EdgeR4toR3 = new Edge(R3, R3_R4);
+            Edge EdgeR4toR6 = new Edge(R6, R4_R6);
             R4.AddEdge(EdgeR4toR1);
             R4.AddEdge(EdgeR4toR3);
             R4.AddEdge(EdgeR4toR6);
 
             //R5 Edges
-            Objects.Edge EdgeR5toR6 = new Objects.Edge(R6, R5_R6);
-            Objects.Edge EdgeR5toR3 = new Objects.Edge(R3, R3_R5);
+            Edge EdgeR5toR6 = new Edge(R6, R5_R6);
+            Edge EdgeR5toR3 = new Edge(R3, R3_R5);
             R5.AddEdge(EdgeR5toR3);
             R5.AddEdge(EdgeR5toR6);
 
             //R6 Edges
-            Objects.Edge EdgeR6toR2 = new Objects.Edge(R2, R2_R6);
-            Objects.Edge EdgeR6toR4 = new Objects.Edge(R4, R4_R6);
-            Objects.Edge EdgeR6toR5 = new Objects.Edge(R5, R5_R6);
+            Edge EdgeR6toR2 = new Edge(R2, R2_R6);
+            Edge EdgeR6toR4 = new Edge(R4, R4_R6);
+            Edge EdgeR6toR5 = new Edge(R5, R5_R6);
             R6.AddEdge(EdgeR6toR2);
             R6.AddEdge(EdgeR6toR4);
             R6.AddEdge(EdgeR6toR5);
+            #endregion
+
+            Node x = new Node("");
+
+            switch (n)
+            {
+                case "R1":
+                    x = R1;
+                    break;
+                case "R2":
+                    x = R2;
+                    break;
+                case "R3":
+                    x = R3;
+                    break;
+                case "R4":
+                    x = R4;
+                    break;
+                case "R5":
+                    x = R5;
+                    break;
+                case "R6":
+                    x = R6;
+                    break;
+                case "":
+                    MessageBox.Show("You did not select a node", "Missing Node", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    break;
+            }
 
             int i = 999;
             System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
             sw.Start();
-            BellmanFord BF = new BellmanFord(R5);
+
+            BellmanFord BF = new BellmanFord(x);
 
             BF.AddArray(new[] { 0, R1_R2, R1_R3, R1_R4, i, i });
             BF.AddArray(new[] { R1_R2, 0, i, i, i, R2_R6 });
@@ -233,18 +264,16 @@ namespace AlgorithmProject
             this.textBoxBellmanDisplay.Text = BF.ListOfMatrix.Last();           
             //this.textBoxIteration.Text = BF.iterationCount.ToString();
 
-            for (int j = 0; j < BF.BeenThereListOfNodes.Count; j++)
+            for (int j = 1; j < BF.BeenThereListOfNodes.Count; j++)
             {
                 List<String> s = BF.Routes;
                 string nextHop = s[j];
 
-                this.dataGridView2.Rows.Insert(j, new string[] {
-        BF.BeenThereListOfNodes[j].NodeName,
-     nextHop.Substring(5,4), BF.BeenThereListOfNodes[j].NodeValue.ToString() ,
-    s[j].ToString(),
-    BF.iterationCount.ToString(),
-    sw.Elapsed.ToString()
-});
+                this.dataGridView2.Rows.Insert(j - 1, new string[] {
+                    BF.BeenThereListOfNodes[j].NodeName,
+                    nextHop.Substring(5,4), BF.BeenThereListOfNodes[j].NodeValue.ToString() ,
+                    s[j].ToString(), BF.iterationCount.ToString(), sw.Elapsed.ToString()
+                    });
             }
 
         }

@@ -14,7 +14,7 @@ namespace AlgorithmProject.Algorithms
         private List<Node> _ListOfNodes, _BeenThereListOfNodes;
         private List<String> _Routes, _ListRouteDescription, _ListOfMatrix;
         private List<int[]> _ListOfCost, _ListOfDistance, _ListOfUpdate;
-        public int iterationCount;       
+        public int iterationCount, changeCount;       
 
         public BellmanFord(Node RootNode)
         {
@@ -36,6 +36,7 @@ namespace AlgorithmProject.Algorithms
 
         public void StartBellmanFord()
         {
+            changeCount = 0;
             iterationCount = 0;
             InitiateDistanceMatrix();
             InitiateUpdateMatrix();
@@ -75,13 +76,13 @@ namespace AlgorithmProject.Algorithms
                 if (ListOfUpdate[i].Contains(999))
                 {
                     SolveBellmanFord(this.ListOfUpdate);
-                    //iterationCount++;
+                    iterationCount++;
                 }
             }
             if (!CheckForChange(distance, ListOfUpdate))
             {
                 SolveBellmanFord(this.ListOfUpdate);
-                //iterationCount++;
+                iterationCount++;
             }
             sw.Stop();
             string stopwatch = sw.Elapsed.ToString();
@@ -95,7 +96,10 @@ namespace AlgorithmProject.Algorithms
                 for (int j = 0; j < distance.Count(); j++)
                 {
                     if (distance[i][j] != LoU[i][j])
+                    {
+                        changeCount++;
                         return false;
+                    }
                 }
             }
             return true;
